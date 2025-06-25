@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 
-from app.employee.employeeService import EmployeeService
-from app.review import reviewService
-from app.review.review import Review
+from app.employee.employee_schema import ReviewIn
 from app.review.reviewService import ReviewService
 
 reviewRouter=APIRouter()
@@ -11,12 +9,14 @@ async def get_review(employee_id: int):
     return ReviewService.getAllReviews(employee_id)
 
 @reviewRouter.post("/review")
-async def post_review(employee_id:int,review:Review):
-    return ReviewService.postReview(employee_id,review)
+async def post_review(review:ReviewIn):
+    temp= ReviewService.postReview(review)
+    return temp
+    # return
 
 @reviewRouter.delete("/review/{review_id}")
-async def delete_review(review_id:int,employee_id:int):
-    emp=ReviewService.deleteReview(employee_id,review_id)
+async def delete_review(review_id:int):
+    emp=ReviewService.deleteReview(review_id)
     return emp
 
 

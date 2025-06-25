@@ -1,13 +1,13 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+from sqlmodel import SQLModel, Field, Relationship
 
-from pydantic import BaseModel
-
-
-class Review(BaseModel):
-    review_id: Optional[int] = None
-    employee_id: Optional[int] = None
+if TYPE_CHECKING:
+    from app.employee.employee import Employee
+class Review(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id: Optional[int] = Field(default=None,foreign_key="employee.id")
     description: Optional[str] = None
     rating: Optional[float] = None
     isAnonymous: Optional[bool] = None
 
-
+    employee: Optional["Employee"] = Relationship(back_populates="reviews")

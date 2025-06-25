@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
-from app.employee import employeeService
 from app.employee.employeeService import EmployeeService
 from app.employee.employee import Employee
+from app.employee.employee_schema import EmployeeIn
 
 employeeRouter = APIRouter()
 
@@ -17,12 +17,22 @@ async def getById(id: int):
         raise HTTPException(status_code=404, detail="Employee not found")
     return employee
 
+#
+# @employeeRouter.post("/employee")
+# async def postAll(employees:list[Employee]):
+#     if employees is None:
+#         raise HTTPException(status_code=404, detail="Employee not found")
+#     EmployeeService.insertAllEmployee(employees)
+#     return employees
+
+
+
 @employeeRouter.post("/employee")
-async def post(employee:Employee):
+async def post(employee: EmployeeIn):
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
-    EmployeeService.insertEmployee(employee)
-    return employee
+    return EmployeeService.insertEmployee(employee)
+
 
 @employeeRouter.delete("/employee/{id}")
 async def delete(id: int):
@@ -30,6 +40,7 @@ async def delete(id: int):
     if emp is None:
         raise HTTPException(status_code=404, detail="Employee not found")
     return emp
+
 
 @employeeRouter.patch("/employee/{id}")
 async def update(id:int,employee:Employee):
